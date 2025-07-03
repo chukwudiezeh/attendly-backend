@@ -1,5 +1,5 @@
 const ClassSetting = require('../models/ClassSetting');
-const AppError = require('../utils/appError');
+const AppError = require('../utils/AppError');
 
 class ClassSettingService {
   // Create class setting
