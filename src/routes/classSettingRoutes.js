@@ -4,7 +4,6 @@ const { validateToken } = require('../middlewares/tokenValidator');
 const {
   validateCreateClassSetting,
   validateUpdateClassSetting,
-  validateBulkCreate,
   validateId,
   validateCourseId
 } = require('../middlewares/validators/classSettingValidator');
@@ -65,13 +64,6 @@ router.post('/course/:courseId/reset',
   validateToken,
   validateCourseId,
   classSettingController.resetToDefault
-);
-
-// Bulk create default settings
-router.post('/bulk-create',
-  validateToken,
-  validateBulkCreate,
-  classSettingController.bulkCreateDefaultSettings
 );
 
 module.exports = router; 
