@@ -74,7 +74,6 @@ const userCourseSchema = new Schema({
  
 // Indexes
 userCourseSchema.index({ user: 1, semester: 1, academicYear: 1, curriculumCourse: 1, curriculumCourseRole: 1 }, { unique: true });
-userCourseSchema.index({ user: 1, academicYear: 1 });
 userCourseSchema.index({ curriculumCourse: 1, semester: 1, academicYear: 1 });
 userCourseSchema.index({ department: 1, level: 1 });
 userCourseSchema.index({ status: 1 });

@@ -31,6 +31,11 @@ class UtilityService {
       .sort({ name: 1 })
       .populate('faculty', 'name');
   }
+
+  static async getAllDepartments() {
+    return Department.find({})
+      .sort({ name: 1 });
+  }
 }
 
 module.exports = UtilityService;
