@@ -19,7 +19,7 @@ router.post('/login', validateLogin, authController.login);
 router.post('/verify', validateToken, validateVerifyToken, authController.verifyAccount);
 
 // Resend verification email
-router.post('/resend-verification', validateToken, authController.resendVerificationEmail);
+router.get('/resend-verification', validateToken, authController.resendVerificationEmail);
 
 // Password reset routes
 router.post('/forgot-password', validateForgotPassword, authController.requestPasswordReset);
