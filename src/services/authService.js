@@ -339,7 +339,7 @@ class AuthService {
     };
   }
 
-  static async resendVerificationEmail(userId) {
+  async resendVerificationEmail(userId) {
     // Fetch user by ID
     const user = await User.findById(userId);
     if (!user) {
