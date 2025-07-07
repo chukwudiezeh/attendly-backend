@@ -18,9 +18,12 @@ router.post('/register/lecturer', validateLecturerRegistration, authController.r
 router.post('/login', validateLogin, authController.login);
 router.post('/verify', validateToken, validateVerifyToken, authController.verifyAccount);
 
+// Resend verification email
+router.post('/resend-verification', validateToken, authController.resendVerificationEmail);
+
 // Password reset routes
 router.post('/forgot-password', validateForgotPassword, authController.requestPasswordReset);
 router.post('/verify-reset-token', validateVerifyResetToken, authController.verifyResetToken);
 router.post('/reset-password', validateResetPassword, authController.resetPassword);
 
-module.exports = router; 
+module.exports = router;

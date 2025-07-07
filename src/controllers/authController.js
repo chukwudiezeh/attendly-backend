@@ -72,6 +72,32 @@ class AuthController {
       return errorResponse(res, error, error.statusCode || statusCodes.serverError, error.message);
     }
   }
+
+  /**
+   * @desc    Resend verification email
+   * @route   POST /api/auth/resend-verification
+   * @access  Private (token required)
+   */
+  async resendVerificationEmail(req, res) {
+    try {
+      const userId = req.user._id; // assuming req.user is set by validateToken middleware
+      await authService.resendVerificationEmail(userId);
+
+      return successResponse(
+        res,
+        null,
+        statusCodes.ok,
+        'Verification email resent successfully'
+      );
+    } catch (error) {
+      return errorResponse(
+        res,
+        error,
+        statusCodes.serverError,
+        'Error resending verification email'
+      );
+    }
+  }
 }
 
-module.exports = new AuthController(); 
+module.exports = new AuthController();

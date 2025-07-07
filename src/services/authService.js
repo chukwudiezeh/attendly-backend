@@ -338,6 +338,24 @@ class AuthService {
       message: 'Password reset successful'
     };
   }
+
+  static async resendVerificationEmail(userId) {
+    // Fetch user by ID
+    const user = await User.findById(userId);
+    if (!user) {
+      throw new AppError('User not found', statusCodes.notFound);
+    }
+    if (user.emailVerified) {
+      throw new AppError('Account already verified', statusCodes.badRequest);
+    }
+
+    const otp = await this.generateOtp(user._id, otpTypes.accountActivation);
+
+    // Send verification email
+    await emailService.dispatchAccountVerificationEmail(user, otp);
+
+    return true;
+  }
 }
 
-module.exports = new AuthService(); 
+module.exports = new AuthService();
