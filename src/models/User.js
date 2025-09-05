@@ -43,7 +43,25 @@ const userSchema = new Schema({
   emailVerifiedAt: {
     type: Date,
     default: null
-  }
+  },
+  level: {
+    type: String,
+    enum: ['100', '200', '300', '400', '500', '600'],
+    default: null
+  },
+  semester: {
+    type: String,
+    enum: ['first', 'second'],
+    default: null
+  },
+  academicYear: {
+    type: Schema.Types.ObjectId,
+    ref: 'AcademicYear',
+  },
+  profilePicture: {
+    type: String,
+    default: null
+  } 
 }, {
   timestamps: true,
   toJSON: {

@@ -12,6 +12,10 @@ class UtilityService {
       .sort({ startYear: -1 });
   }
 
+  static async getCurrentAcademicYear() {
+    return AcademicYear.findOne({ isCurrent: true });
+  }
+  
   /**
    * Get all faculties sorted alphabetically
    * @returns {Promise<Array>} Array of faculties

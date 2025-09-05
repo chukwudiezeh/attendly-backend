@@ -93,8 +93,8 @@ class AuthController {
       return errorResponse(
         res,
         error,
-        statusCodes.serverError,
-        'Error resending verification email'
+        error.statusCode || statusCodes.serverError,
+        error.message || 'Error resending verification email'
       );
     }
   }

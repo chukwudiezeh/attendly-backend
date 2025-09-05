@@ -7,6 +7,8 @@ const { userRoles, otpTypes, statusCodes } = require('../configs/constants');
 const { generateRandomDigits } = require('../utils/helper');
 const emailService = require('./emailService');
 const AppError = require('../utils/AppError');
+const { generateAvatarAndUpload } = require('../utils/avatarGenerator');
+const AcademicYear = require('../models/AcademicYear');
 
 class AuthService {
   async registerStudent(userData) {
@@ -30,22 +32,28 @@ class AuthService {
         statusCodes.unauthorized
       );
     }
-
+    const profilePicture = await generateAvatarAndUpload(userData.firstName, userData.lastName);
+    const academicYear = await AcademicYear.findOne({ isCurrent: true });
     const user = new User({
       ...userData,
-      role: userRoles.student
+      role: userRoles.student,
+      profilePicture,
+      academicYear: academicYear ? academicYear._id : null
     });
 
     try {
       await user.save();
-      
+      const populatedUser = await User.findById(user._id)
+        .populate('department')
+        .populate('academicYear');
+
       // Generate and save activation OTP
       const otp = await this.generateOtp(user._id, otpTypes.accountActivation);
 
       // Send verification email
       await emailService.dispatchAccountVerificationEmail(user, otp);
 
-      return this.generateAuthResponse(user);
+      return this.generateAuthResponse(populatedUser);
     } catch (error) {
       throw new AppError(
         'Error creating user account',
@@ -72,6 +80,9 @@ class AuthService {
 
     try {
       await user.save();
+      const populatedUser = await User.findById(user._id)
+        .populate('department')
+        .populate('academicYear');
 
       // Generate and save activation OTP
       const otp = await this.generateOtp(user._id, otpTypes.accountActivation);
@@ -79,7 +90,7 @@ class AuthService {
       // Send verification email
       await emailService.dispatchAccountVerificationEmail(user, otp);
 
-      return this.generateAuthResponse(user);
+      return this.generateAuthResponse(populatedUser);
     } catch (error) {
       throw new AppError(
         'Error creating lecturer account',
