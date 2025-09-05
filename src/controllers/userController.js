@@ -32,4 +32,4 @@ class UserController {
   }
 }
 
-module.exports = new
+module.exports = new UserController();
