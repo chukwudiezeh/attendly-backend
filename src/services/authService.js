@@ -106,7 +106,8 @@ class AuthService {
         { email: identifier.toLowerCase() },
         { matricNumber: identifier }
       ]
-    });
+    }).populate(['department', 'academicYear']);
+    
     if (!user) {
       throw new AppError('Unauthorized! Invalid user', statusCodes.unauthorized);
     }
