@@ -26,9 +26,9 @@ class DepartmentCurriculumController {
   async getDepartmentLevelCourses(req, res) {
     try {
       const { departmentId } = req.params;
-      const { level, semester } = req.query;
-      
-      const levelCourses = await departmentCurriculumService.getLevelCourses(departmentId, level, semester);
+      const { academicYear, level, semester } = req.query;
+
+      const levelCourses = await departmentCurriculumService.getLevelCourses(departmentId, academicYear, level, semester);
       
       return successResponse(res, levelCourses, statusCodes.ok, 'Level courses retrieved successfully');
     } catch (error) {

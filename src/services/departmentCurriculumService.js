@@ -24,20 +24,19 @@ class DepartmentCurriculumService {
   /**
    * Get courses for a specific level and semester in a department
    */
-  async getLevelCourses(departmentId, level, semester) {
-    const curriculum = await DepartmentCurriculum.findOne({ 
-      department: departmentId,
-      'courses.level': level,
-      'courses.semester': semester
-    }).populate('courses.course');
+  async getLevelCourses(department, academicYear, level, semester) {
+    const curricula = await DepartmentCurriculum.find({
+      department,
+      academicYear,
+      level,
+      semester
+    }).populate('course');
 
-    if (!curriculum) {
+    if (!curricula.length) {
       throw new AppError('Curriculum not found for this department', statusCodes.notFound);
     }
 
-    return curriculum.courses.filter(
-      course => course.level === parseInt(level) && course.semester === semester
-    );
+    return curricula;
   }
 }
 
