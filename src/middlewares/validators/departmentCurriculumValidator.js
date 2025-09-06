@@ -47,6 +47,15 @@ const courseSchema = Joi.object({
 
 // Query params schema for getting level courses
 const getLevelCoursesSchema = Joi.object({
+  academicYear: Joi.string()
+  .hex()
+  .length(24)
+  .required()
+  .messages({
+    'string.hex': 'Invalid academic year format',
+    'string.length': 'Invalid academic year format',
+    'any.required': 'Academic year is required'
+  }),
   level: Joi.number()
     .valid(100, 200, 300, 400, 500, 600)
     .required()
