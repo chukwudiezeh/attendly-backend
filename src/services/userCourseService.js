@@ -138,30 +138,40 @@ class UserCourseService {
   }
 
   async getAllUserCourses(user) {
-    console.log("in the service now");
     const userCourses = await UserCourse.aggregate([
-    { $match: { user: user._id } },
-    {
-      $group: {
-        _id: {
-          academicYear: '$academicYear',
-          level: '$level',
-          semester: '$semester'
+      { $match: { user: user._id } },
+      {
+        $group: {
+          _id: {
+            academicYear: '$academicYear',
+            level: '$level',
+            semester: '$semester'
+          }
+        }
+      },
+      {
+        $lookup: {
+          from: 'academicyears', // collection name in MongoDB (usually lowercase plural)
+          localField: '_id.academicYear',
+          foreignField: '_id',
+          as: 'academicYear'
+        }
+      },
+      {
+        $unwind: '$academicYear'
+      },
+      {
+        $project: {
+          academicYear: 1,
+          level: '$_id.level',
+          semester: '$_id.semester',
+          _id: 0
         }
       }
-    },
-    {
-      $project: {
-        academicYear: '$_id.academicYear',
-        level: '$_id.level',
-        semester: '$_id.semester',
-        _id: 0
-      }
-    }
-  ]);
+    ]);
 
-  return userCourses;
+    return userCourses;
   }
 }
 
-module.exports = new UserCourseService(); 
+module.exports = new UserCourseService();
