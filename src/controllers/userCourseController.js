@@ -32,6 +32,17 @@ class UserCourseController {
       return errorResponse(res, error, statusCodes.serverError, 'Error retrieving user courses');
     }
   }
+
+  async getAllUserCourses(req, res) {
+    try {
+      console.log(req.user);
+      const courses = await userCourseService.getAllUserCourses(req.user);
+      console.log(courses);
+      return successResponse(res, courses, statusCodes.ok, 'All user courses retrieved successfully');
+    } catch (error) {
+      return errorResponse(res, error, statusCodes.serverError, 'Error retrieving all user courses');
+    }
+  }
 }
 
 module.exports = new UserCourseController(); 

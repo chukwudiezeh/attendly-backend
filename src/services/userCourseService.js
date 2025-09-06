@@ -136,6 +136,32 @@ class UserCourseService {
     .populate('curriculumCourse', 'courseCode courseName creditUnits')
     .sort({ createdAt: 1 });
   }
+
+  async getAllUserCourses(user) {
+    console.log("in the service now");
+    const userCourses = await UserCourse.aggregate([
+    { $match: { user: user._id } },
+    {
+      $group: {
+        _id: {
+          academicYear: '$academicYear',
+          level: '$level',
+          semester: '$semester'
+        }
+      }
+    },
+    {
+      $project: {
+        academicYear: '$_id.academicYear',
+        level: '$_id.level',
+        semester: '$_id.semester',
+        _id: 0
+      }
+    }
+  ]);
+
+  return userCourses;
+  }
 }
 
 module.exports = new UserCourseService(); 

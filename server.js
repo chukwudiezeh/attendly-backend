@@ -7,6 +7,7 @@ const config = require("./src/configs/app");
 
 //Routes Imports
 const authRoutes = require("./src/routes/authRoutes");
+const userRoutes = require("./src/routes/userRoutes");
 const departmentCurriculumRoutes = require("./src/routes/departmentCurriculumRoutes");
 const utilityRoutes = require("./src/routes/utilityRoutes");
 const userCourseRoutes = require("./src/routes/userCourseRoutes");
@@ -26,6 +27,7 @@ db.initializeConnection();
 
 // Routes Mounts
 app.use('/api/auth', authRoutes);
+app.use('/api/users', userRoutes);
 app.use('/api/department-curricula', departmentCurriculumRoutes);
 app.use('/api/utilities', utilityRoutes);
 app.use('/api/user-courses', userCourseRoutes);
