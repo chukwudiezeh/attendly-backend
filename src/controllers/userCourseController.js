@@ -11,7 +11,8 @@ class UserCourseController {
  */
   async registerCourses(req, res) {
     try {
-      const registeredCourses = await userCourseService.registerCourses(req.body);
+      const user = req.user;
+      const registeredCourses = await userCourseService.registerCourses({user, data: req.body});
 
       return successResponse(res, registeredCourses, statusCodes.created, 'Courses registered successfully');
     } catch (error) {

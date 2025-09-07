@@ -36,9 +36,9 @@ const courseSchema = new Schema({
 courseSchema.index({ name: 1, code: 1 }, { unique: true });
 
 // Virtual to get full course info
-courseSchema.virtual('fullInfo').get(function() {
-  return `${this.code} - ${this.name} (${this.unit} units)`;
-});
+// courseSchema.virtual('fullInfo').get(function() {
+//   return `${this.code} - ${this.name} (${this.unit} units)`;
+// });
 
 // Pre-save hook to generate invite URL if not provided
 courseSchema.pre('save', function(next) {

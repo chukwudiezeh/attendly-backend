@@ -14,8 +14,9 @@ class UserCourseService {
  * @param {Array} data.courses - Array of courses to register
  * @returns {Promise<Array>} Array of registered courses
  */
-  async registerCourses(data) {
-    const { user, academicYear, department, level, semester, courses } = data;
+  async registerCourses(bigData) {
+    const { user, data } = bigData;
+    const { academicYear, department, level, semester, curriculumCourses, curriculumCourseRole } = data;
 
     const session = await mongoose.startSession();
     session.startTransaction();
@@ -23,9 +24,7 @@ class UserCourseService {
     try {
         const userCourses = [];
 
-        for (const userCourse of courses) {
-            const { curriculumCourse, curriculumCourseRole } = userCourse;
-
+        for (const curriculumCourse of curriculumCourses) {
             const existingCourse = await UserCourse.findOne({
                 user,
                 academicYear,

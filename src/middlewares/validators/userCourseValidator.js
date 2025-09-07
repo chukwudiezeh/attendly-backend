@@ -2,35 +2,7 @@ const Joi = require('joi');
 const { errorResponse } = require('../../utils/responseFormatter');
 const { statusCodes } = require('../../configs/constants');
 
-const courseSchema = Joi.object({
-  curriculumCourse: Joi.string()
-    .hex()
-    .length(24)
-    .required()
-    .messages({
-      'string.hex': 'Invalid course ID format',
-      'string.length': 'Invalid course ID format',
-      'any.required': 'Course ID is required'
-    }),
-  curriculumCourseRole: Joi.string()
-    .valid('student', 'lecturer_primary', 'lecturer_secondary', 'lecturer_assistant', 'course_representative')
-    .required()
-    .messages({
-      'any.only': 'Invalid course role',
-      'any.required': 'Course role is required'
-    })
-}).options({ abortEarly: true });
-
 const registerCoursesSchema = Joi.object({
-  user: Joi.string()
-    .hex()
-    .length(24)
-    .required()
-    .messages({
-      'string.hex': 'Invalid user ID format',
-      'string.length': 'Invalid user ID format',
-      'any.required': 'User ID is required'
-    }),
   academicYear: Joi.string()
     .hex()
     .length(24)
@@ -63,13 +35,30 @@ const registerCoursesSchema = Joi.object({
       'any.only': 'Semester must be either "first" or "second"',
       'any.required': 'Semester is required'
     }),
-  courses: Joi.array()
-    .items(courseSchema)
+  curriculumCourses: Joi.array()
+    .items(
+      Joi.string()
+      .hex()
+      .length(24)
+      .required()
+      .messages({
+        'string.hex': 'Invalid course ID format',
+        'string.length': 'Invalid course ID format',
+        'any.required': 'Course ID is required'
+      }),
+    )
     .min(1)
     .required()
     .messages({
       'array.min': 'At least one course is required',
       'any.required': 'Courses array is required'
+    }),
+  curriculumCourseRole: Joi.string()
+    .valid('student', 'lecturer_primary', 'lecturer_secondary', 'lecturer_assistant', 'course_representative')
+    .required()
+    .messages({
+      'any.only': 'Invalid course role',
+      'any.required': 'Course role is required'
     })
 }).options({ abortEarly: true });
 
