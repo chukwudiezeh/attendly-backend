@@ -63,15 +63,6 @@ const registerCoursesSchema = Joi.object({
 }).options({ abortEarly: true });
 
 const getUserCoursesSchema = Joi.object({
-  userId: Joi.string()
-    .hex()
-    .length(24)
-    .required()
-    .messages({
-      'string.hex': 'Invalid user ID format',
-      'string.length': 'Invalid user ID format',
-      'any.required': 'User ID is required'
-    }),
   academicYear: Joi.string()
     .hex()
     .length(24)

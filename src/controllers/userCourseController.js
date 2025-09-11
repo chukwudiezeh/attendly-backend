@@ -26,7 +26,9 @@ class UserCourseController {
  */
   async getUserCourses(req, res) {
     try {
-      const courses = await userCourseService.getUserCourses(req.query);
+      console.log(req.query);
+      const user = req.user;
+      const courses = await userCourseService.getUserCourses({user, data: req.query});
 
       return successResponse(res, courses, statusCodes.ok, 'User courses retrieved successfully');
     } catch (error) {
@@ -36,9 +38,8 @@ class UserCourseController {
 
   async getAllUserCourses(req, res) {
     try {
-      console.log(req.user);
       const courses = await userCourseService.getAllUserCourses(req.user);
-      console.log(courses);
+
       return successResponse(res, courses, statusCodes.ok, 'All user courses retrieved successfully');
     } catch (error) {
       return errorResponse(res, error, statusCodes.serverError, 'Error retrieving all user courses');

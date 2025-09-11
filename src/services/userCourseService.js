@@ -112,22 +112,27 @@ class UserCourseService {
  * @param {string} semester - Semester (first/second)
  * @returns {Promise<Array>} Array of user courses
  */
-  async getUserCourses(data, populate = true) {
+  async getUserCourses(bigData) {
 
-    const { user, academicYear, department, level, semester } = data;
-
+    const {user, data } = bigData;
+    const {academicYear, department, level, semester } = data;
     const query = {
-        user,
-        department
+        user: user._id
     }
-
+    if (department) query.department = department;
     if (academicYear) query.academicYear = academicYear;
     if (level) query.level = level;
     if (semester) query.semester = semester;
 
-    const userCourses = await UserCourse.find(query);
-
-    return userCourses.sort({ 'createdAt': -1 });
+    const userCourses = await UserCourse.find(query)
+      .sort({ createdAt: -1 })
+      .populate([
+        { path: 'academicYear' },
+        { path: 'department' },
+        { path: 'curriculumCourse', select: 'course level semester courseType creditUnits', populate: { path: 'course', select: 'code name' } }
+      ]);
+    console.log('Fetched user courses:', userCourses);
+    return userCourses
   }
 
   // Get single user course
