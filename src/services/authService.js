@@ -70,12 +70,16 @@ class AuthService {
     // Check if user already exists
     const existingUser = await User.findOne({ email: userData.email });
     if (existingUser) {
-      throw new AppError('Email is already registered', statusCodes.conflict);
+      throw new AppError('Email is already registered', statusCodes.unauthorized);
     }
 
+    const profilePicture = await generateAvatarAndUpload(userData.firstName, userData.lastName);
+    const academicYear = await AcademicYear.findOne({ isCurrent: true });
     const user = new User({
       ...userData,
-      role: userRoles.lecturer
+      role: userRoles.lecturer,
+      profilePicture,
+      academicYear: academicYear ? academicYear._id : null
     });
 
     try {
