@@ -44,7 +44,7 @@ class UserCourseService {
               }
 
               userCourses.push({
-                  user,
+                  user: user._id,
                   academicYear,
                   department,
                   level,

@@ -10,7 +10,7 @@ const userCourseSchema = new Schema({
   curriculumCourseRole: {
     type: String,
     required: true,
-    enum: ['student', 'lecturer_primary', 'lecturer_secondary', 'lecturer_assistant', 'course_representative',]
+    enum: ['student', 'lecturer', 'lecturer_secondary', 'lecturer_assistant', 'course_representative',]
   },
   academicYear: {
     type: Schema.Types.ObjectId,
