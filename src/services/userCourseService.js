@@ -1,6 +1,8 @@
 const UserCourse = require('../models/UserCourse');
 const mongoose = require('mongoose');
-
+const { statusCodes, userRoles } = require('../configs/constants');
+const AppError = require('../utils/AppError');
+const DepartmentCurriculum = require('../models/DepartmentCurriculum');
 
 class UserCourseService {
   /**
@@ -24,30 +26,67 @@ class UserCourseService {
     try {
         const userCourses = [];
 
-        for (const curriculumCourse of curriculumCourses) {
-            const existingCourse = await UserCourse.findOne({
-                user,
-                academicYear,
-                department,
-                level,
-                semester,
-                curriculumCourse,
-                curriculumCourseRole
-            }).populate('curriculumCourse.course', 'code').session(session);
+        if (user.role == userRoles.student) {
 
-            if (existingCourse) {
-                throw new AppError(`${existingCourse.curriculumCourse.course.code} already registered for this semester`, statusCodes.badRequest);
+          for (const curriculumCourse of curriculumCourses) {
+              const existingCourse = await UserCourse.findOne({
+                  user: user._id,
+                  academicYear,
+                  department,
+                  level,
+                  semester,
+                  curriculumCourse,
+                  curriculumCourseRole
+              }).populate('curriculumCourse.course', 'code').session(session);
+
+              if (existingCourse) {
+                  throw new AppError(`${existingCourse.curriculumCourse.course.code} already registered for this semester`, statusCodes.badRequest);
+              }
+
+              userCourses.push({
+                  user,
+                  academicYear,
+                  department,
+                  level,
+                  semester,
+                  curriculumCourse,
+                  curriculumCourseRole
+              });
+          }
+        } else if (user.role == userRoles.lecturer) {
+          for (const curriculumCourse of curriculumCourses) {
+            //fetch curriculum Cpurse
+            const curriculumCourseDoc = await DepartmentCurriculum.findById(curriculumCourse).session(session);
+            if (!curriculumCourseDoc) {
+              throw new AppError('Invalid curriculum course ID', statusCodes.badRequest);
             }
-
+            //check for existing source registration
+            const existingCourse = await UserCourse.findOne({
+              user: user._id,
+              academicYear,
+              department: curriculumCourseDoc.department,
+              level: curriculumCourseDoc.level,
+              semester: curriculumCourseDoc.semester,
+              curriculumCourse,
+              curriculumCourseRole
+            }).populate('curriculumCourse.course', 'code').session(session);
+            //throw error if exists
+            if (existingCourse) {
+              throw new AppError(`${existingCourse.curriculumCourse.course.code} already registered for this semester`, statusCodes.badRequest);
+            }
+            //format new db payload
             userCourses.push({
-                user,
-                academicYear,
-                department,
-                level,
-                semester,
-                curriculumCourse,
-                curriculumCourseRole
+              user: user._id,
+              academicYear,
+              department: curriculumCourseDoc.department,
+              level: curriculumCourseDoc.level,
+              semester: curriculumCourseDoc.semester,
+              curriculumCourse,
+              curriculumCourseRole
             });
+          }
+        } else {
+          throw new AppError('Only students and lecturers can register courses', statusCodes.forbidden);
         }
 
         const registeredCourses = await UserCourse.insertMany(userCourses, { session });
@@ -137,13 +176,46 @@ class UserCourseService {
   }
 
   async getAllUserCourses(user) {
-    const userCourses = await UserCourse.aggregate([
+    let userCourses;
+    if (user.role == userRoles.student) {
+      userCourses = await UserCourse.aggregate([
+        { $match: { user: user._id } },
+        {
+          $group: {
+            _id: {
+              academicYear: '$academicYear',
+              level: '$level',
+              semester: '$semester'
+            }
+          }
+        },
+        {
+          $lookup: {
+            from: 'academicyears', // collection name in MongoDB (usually lowercase plural)
+            localField: '_id.academicYear',
+            foreignField: '_id',
+            as: 'academicYear'
+          }
+        },
+        {
+          $unwind: '$academicYear'
+        },
+        {
+          $project: {
+            academicYear: 1,
+            level: '$_id.level',
+            semester: '$_id.semester',
+            _id: 0
+          }
+        }
+      ]);
+    } else if (user.role == userRoles.lecturer) {
+      userCourses = await UserCourse.aggregate([
       { $match: { user: user._id } },
       {
         $group: {
           _id: {
             academicYear: '$academicYear',
-            level: '$level',
             semester: '$semester'
           }
         }
@@ -162,12 +234,14 @@ class UserCourseService {
       {
         $project: {
           academicYear: 1,
-          level: '$_id.level',
           semester: '$_id.semester',
           _id: 0
         }
       }
     ]);
+    } else {
+      throw new AppError('Only students and lecturers can access their courses', statusCodes.forbidden);
+    }
 
     return userCourses;
   }

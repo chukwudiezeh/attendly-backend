@@ -25,6 +25,7 @@ const userCourseSchema = new Schema({
   level: {
     type: Number,
     required: true,
+    default: null,
     enum: [100, 200, 300, 400, 500, 600]
   },
   semester: {
