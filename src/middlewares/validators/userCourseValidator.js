@@ -54,7 +54,7 @@ const registerCoursesSchema = Joi.object({
       'any.required': 'Courses array is required'
     }),
   curriculumCourseRole: Joi.string()
-    .valid('student', 'lecturer_primary', 'lecturer_secondary', 'lecturer_assistant', 'course_representative')
+    .valid('student', 'lecturer', 'lecturer_secondary', 'lecturer_assistant', 'course_representative')
     .required()
     .messages({
       'any.only': 'Invalid course role',
