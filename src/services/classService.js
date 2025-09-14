@@ -1,11 +1,11 @@
-const ClassSchedule = require('../models/Class');
+const Class = require('../models/Class');
 
 class ClassService {
   // Create a new class
   async createClass(classData) {
     //get the count of existing classes for the course to generate a unique name
-    const classCount = await ClassSchedule.countDocuments({ curriculumCourse: classData.curriculumCourse });
-    const newClass = new ClassSchedule({
+    const classCount = await Class.countDocuments({ curriculumCourse: classData.curriculumCourse });
+    const newClass = new Class({
       ...classData,
       name: `Class ${classCount + 1}`
     });
@@ -14,7 +14,7 @@ class ClassService {
 
   // Update an existing class
   async updateClass(classId, updateData) {
-    return await ClassSchedule.findByIdAndUpdate(
+    return await Class.findByIdAndUpdate(
       classId,
       updateData,
       { new: true }
@@ -23,14 +23,14 @@ class ClassService {
 
   // Get all classes by course
   async getClassesByCourse(courseId) {
-    return await ClassSchedule.find({ curriculumCourse: courseId })
+    return await Class.find({ curriculumCourse: courseId })
       .populate('curriculumCourse', 'classSchedule')
       .sort({ createdAt: -1 });
   }
 
   // Get a single class by ID
   async getClassById(classId) {
-    return await ClassSchedule.findById(classId)
+    return await Class.findById(classId)
       .populate('curriculumCourse', 'classSchedule');
   }
 }

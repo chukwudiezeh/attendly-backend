@@ -16,7 +16,7 @@ const classSchema = new Schema({
     enum: ['scheduled', 'in_progress', 'completed', 'cancelled'],
     default: 'scheduled'
   },
-  schedule: {
+  classSchedule: {
     type: Schema.Types.ObjectId,
     ref: 'ClassSchedule',
     required: true
@@ -49,8 +49,8 @@ const classSchema = new Schema({
 });
 
 // Indexes for faster lookups
-classSchema.index({ course: 1, status: 1 });
-classSchema.index({ schedule: 1 });
+classSchema.index({ curriculumCourse: 1, status: 1 });
+classSchema.index({ classSchedule: 1 });
 classSchema.index({ createdBy: 1 });
 
 const Class = mongoose.model('Class', classSchema);
