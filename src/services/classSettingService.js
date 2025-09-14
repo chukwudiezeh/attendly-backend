@@ -39,17 +39,8 @@ class ClassSettingService {
   // Get class setting by course ID
   async getClassSettingByCourse(courseId) {
     const setting = await ClassSetting.findOne({ curriculumCourse: courseId })
-      .populate('curriculumCourse', 'courseCode courseName creditUnits');
-    
-    if (!setting) {
-      // Return default settings if none exist
-      return {
-        curriculumCourse: courseId,
-        ...ClassSetting.getDefaultSettings(),
-        isDefault: true
-      };
-    }
-    
+      .populate('curriculumCourse');
+      
     return setting;
   }
 

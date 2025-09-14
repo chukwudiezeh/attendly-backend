@@ -30,7 +30,7 @@ router.get('/:id',
 );
 
 // Get class setting by course
-router.get('/course/:courseId',
+router.get('/curriculum-course/:courseId',
   validateToken,
   validateCourseId,
   classSettingController.getClassSettingByCourse

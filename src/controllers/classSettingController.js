@@ -33,7 +33,7 @@ class ClassSettingController {
 
   /**
    * @desc    Get class setting by course ID
-   * @route   GET /api/class-settings/course/:courseId
+   * @route   GET /api/class-settings/curriculum-course/:courseId
    * @access  Private
    */
   async getClassSettingByCourse(req, res) {

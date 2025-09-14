@@ -19,7 +19,7 @@ const createClassScheduleSchema = Joi.object({
 
 const updateClassScheduleSchema = Joi.object({
   curriculumCourse: Joi.string(),
-  day: Joi.string().valid('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'),
+  day: Joi.string().valid('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
   startTime: Joi.string(),
   endTime: Joi.string(),
   duration: Joi.number().min(1),

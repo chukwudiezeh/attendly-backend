@@ -10,7 +10,7 @@ router.post('/', validateCreateClassSchedule, classScheduleController.createClas
 router.get('/', classScheduleController.getAllClassSchedules);
 
 // Get class schedules by course
-router.get('/course/:courseId', classScheduleController.getClassSchedulesByCourse);
+router.get('/curriculum-course/:courseId', classScheduleController.getClassSchedulesByCourse);
 
 // Get a specific class schedule
 router.get('/:id', classScheduleController.getClassScheduleById);
