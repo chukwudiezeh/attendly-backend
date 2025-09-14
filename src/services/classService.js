@@ -18,20 +18,20 @@ class ClassService {
       classId,
       updateData,
       { new: true }
-    ).populate('curriculumCourse', 'classSchedule');
+    ).populate(['curriculumCourse', 'classSchedule']);
   }
 
   // Get all classes by course
   async getClassesByCourse(courseId) {
     return await Class.find({ curriculumCourse: courseId })
-      .populate('curriculumCourse', 'classSchedule')
+      .populate(['curriculumCourse', 'classSchedule'])
       .sort({ createdAt: -1 });
   }
 
   // Get a single class by ID
   async getClassById(classId) {
     return await Class.findById(classId)
-      .populate('curriculumCourse', 'classSchedule');
+      .populate(['curriculumCourse', 'classSchedule']);
   }
 }
 
