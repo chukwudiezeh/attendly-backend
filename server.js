@@ -14,6 +14,7 @@ const userCourseRoutes = require("./src/routes/userCourseRoutes");
 const classScheduleRoutes = require("./src/routes/classScheduleRoutes");
 const classSettingRoutes = require("./src/routes/classSettingRoutes");
 const classAttendanceRoutes = require("./src/routes/classAttendanceRoutes");
+const classRoutes = require("./src/routes/classRoutes");
 
 //Mounts
 const app = express();
@@ -34,6 +35,7 @@ app.use('/api/user-courses', userCourseRoutes);
 app.use('/api/class-schedules', classScheduleRoutes);
 app.use('/api/class-settings', classSettingRoutes);
 app.use('/api/class-attendances', classAttendanceRoutes);
+app.use('/api/classes', classRoutes);
 
 // Health check route
 app.get("/", (req, res) => {

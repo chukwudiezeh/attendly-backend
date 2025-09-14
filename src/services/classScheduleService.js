@@ -1,9 +1,17 @@
 const ClassSchedule = require('../models/ClassSchedule');
+const ClassService = require('./classService');
 
 class ClassScheduleService {
   async createClassSchedule(classScheduleData) {
     const classSchedule = new ClassSchedule(classScheduleData);
-    return await classSchedule.save();
+    const savedClassSchedule = await classSchedule.save();
+
+    const classPayload = {
+      curriculumCourse: savedClassSchedule.curriculumCourse,
+      classSchedule: savedClassSchedule.id
+    };
+    await ClassService.createClass(classPayload);
+    return savedClassSchedule;
   }
 
   async getAllClassSchedules(query = {}) {

@@ -26,11 +26,6 @@ const classSchema = new Schema({
     ref: 'ClassScheduleOverride',
     default: null
   },
-  createdBy: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    required: true
-  }
 }, {
   timestamps: true,
   toJSON: {
