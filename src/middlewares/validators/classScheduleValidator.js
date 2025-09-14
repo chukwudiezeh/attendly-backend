@@ -13,7 +13,6 @@ const createClassScheduleSchema = Joi.object({
   day: Joi.string().valid('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday').required(),
   startTime: Joi.string().required(),
   endTime: Joi.string().required(),
-  duration: Joi.number().min(1).required(),
   location: Joi.string().required()
 });
 
@@ -22,7 +21,6 @@ const updateClassScheduleSchema = Joi.object({
   day: Joi.string().valid('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'),
   startTime: Joi.string(),
   endTime: Joi.string(),
-  duration: Joi.number().min(1),
   locationCoordinates: locationSchema,
   locationName: Joi.string()
 });

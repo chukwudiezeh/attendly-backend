@@ -20,11 +20,6 @@ const classScheduleSchema = new Schema({
     type: String,
     required: true
   },
-  duration: {
-    type: Number,
-    required: true,
-    min: 1
-  },
   location: {
     type: String,
     required: true
