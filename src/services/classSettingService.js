@@ -1,4 +1,5 @@
 const ClassSetting = require('../models/ClassSetting');
+const classSchedule = require('../models/ClassSchedule');
 const AppError = require('../utils/AppError');
 
 class ClassSettingService {
@@ -67,7 +68,7 @@ class ClassSettingService {
       id,
       { ...updateData, updatedAt: new Date() },
       { new: true, runValidators: true }
-    ).populate('curriculumCourse', 'courseCode courseName creditUnits');
+    ).populate('curriculumCourse');
 
     if (!setting) {
       throw new AppError('Class setting not found', statusCodes.notFound);

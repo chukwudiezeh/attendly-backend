@@ -10,12 +10,11 @@ const locationSchema = Joi.object({
 
 const createClassScheduleSchema = Joi.object({
   curriculumCourse: Joi.string().required(),
-  day: Joi.string().valid('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday').required(),
+  day: Joi.string().valid('Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday').required(),
   startTime: Joi.string().required(),
   endTime: Joi.string().required(),
   duration: Joi.number().min(1).required(),
-  locationCoordinates: locationSchema.required(),
-  locationName: Joi.string().required()
+  location: Joi.string().required()
 });
 
 const updateClassScheduleSchema = Joi.object({

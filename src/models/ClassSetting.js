@@ -19,8 +19,14 @@ const classSettingSchema = new Schema({
     required: true,
     min: 0,
     max: 100,
-    default: 70 // 75% default
+    default: 75 // 75% default
   },
+  attendanceWindow: {
+    type: Number,
+    required: true,
+    min: 0,
+    default: 15
+  }, // in minutes, optional
   recurringClasses: {
     type: Boolean,
     required: true,
@@ -29,7 +35,7 @@ const classSettingSchema = new Schema({
   autoCreateClass: {
     type: Boolean,
     required: true,
-    default: false
+    default: true
   },
   shouldSendNotifications: {
     type: Boolean,

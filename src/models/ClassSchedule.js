@@ -1,17 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
-const locationSchema = new Schema({
-  longitude: {
-    type: Number,
-    required: true
-  },
-  latitude: {
-    type: Number,
-    required: true
-  }
-}, { _id: false });
-
 const classScheduleSchema = new Schema({
   curriculumCourse: {
     type: Schema.Types.ObjectId,
@@ -20,7 +9,7 @@ const classScheduleSchema = new Schema({
   },
   day: {
     type: String,
-    enum: ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'],
+    enum: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'],
     required: true
   },
   startTime: {
@@ -36,11 +25,7 @@ const classScheduleSchema = new Schema({
     required: true,
     min: 1
   },
-  locationCoordinates: {
-    type: locationSchema,
-    required: true
-  },
-  locationName: {
+  location: {
     type: String,
     required: true
   }
