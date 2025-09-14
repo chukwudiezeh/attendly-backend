@@ -13,8 +13,9 @@ class ClassScheduleService {
   }
 
   async getClassScheduleById(id) {
-    return await ClassSchedule.findById(id)
+    const schedule = await ClassSchedule.findById(id)
       .populate('curriculumCourse');
+    return schedule || {};
   }
 
   async updateClassSchedule(id, updateData) {
@@ -30,10 +31,11 @@ class ClassScheduleService {
   }
 
   async getClassSchedulesByCourse(courseId) {
-    return await ClassSchedule.find({ curriculumCourse: courseId })
+    const schedules = await ClassSchedule.find({ curriculumCourse: courseId })
       .populate('curriculumCourse')
       .sort({ day: 1, startTime: 1 });
+    return schedules.length ? schedules : [{}];
   }
 }
 
-module.exports = new ClassScheduleService(); 
+module.exports = new ClassScheduleService();

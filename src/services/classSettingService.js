@@ -28,20 +28,14 @@ class ClassSettingService {
   async getClassSettingById(id) {
     const setting = await ClassSetting.findById(id)
       .populate('curriculumCourse', 'courseCode courseName creditUnits');
-    
-    if (!setting) {
-      throw new AppError('Class setting not found', statusCodes.notFound);
-    }
-    
-    return setting;
+    return setting || {};
   }
 
   // Get class setting by course ID
   async getClassSettingByCourse(courseId) {
     const setting = await ClassSetting.findOne({ curriculumCourse: courseId })
       .populate('curriculumCourse');
-      
-    return setting;
+    return setting || {};
   }
 
   // Get all class settings
@@ -91,12 +85,7 @@ class ClassSettingService {
   // Delete class setting
   async deleteClassSetting(id) {
     const setting = await ClassSetting.findByIdAndDelete(id);
-    
-    if (!setting) {
-      throw new AppError('Class setting not found', statusCodes.notFound);
-    }
-    
-    return setting;
+    return setting || {};
   }
 
   // Reset to default settings
