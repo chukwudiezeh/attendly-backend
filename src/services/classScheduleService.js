@@ -34,7 +34,7 @@ class ClassScheduleService {
     const schedules = await ClassSchedule.find({ curriculumCourse: courseId })
       .populate('curriculumCourse')
       .sort({ day: 1, startTime: 1 });
-    return schedules.length ? schedules : [{}];
+    return schedules.length ? schedules : [];
   }
 }
 
