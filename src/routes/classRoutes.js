@@ -15,7 +15,7 @@ router.put('/:id', ClassController.updateClass);
 router.get('/:id', ClassController.getClass);
 
 // Get all classes by course
-router.get('/course/:courseId', ClassController.getClassesByCourse);
+router.get('/curriculum-course/:courseId', ClassController.getClassesByCourse);
 
 // Get all classes
 // router.get('/', ClassController.getAllClasses);
