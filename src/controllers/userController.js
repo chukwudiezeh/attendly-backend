@@ -17,9 +17,7 @@ class UserController {
         userId,
         updateData,
         { new: true }
-      )
-      .populate('department')
-      .populate('academicYear');
+      ).populate(['department', 'academicYear']);
 
       if (!updatedUser) {
         return errorResponse(res, null, statusCodes.notFound, 'User not found');
