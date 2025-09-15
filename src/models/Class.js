@@ -1,6 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const geolocationSchema = new Schema({
+  speed: { type: Number, default: 0 },
+  heading: { type: Number, default: 0 },
+  altitude: { type: Number, default: 0 },
+  accuracy: { type: Number, default: 0 },
+  longitude: { type: Number }, // not required
+  latitude: { type: Number }   // not required
+}, { _id: false });
+
+
 const classSchema = new Schema({
   curriculumCourse: {
     type: Schema.Types.ObjectId,
@@ -15,6 +25,10 @@ const classSchema = new Schema({
     type: String,
     enum: ['scheduled', 'in_progress', 'completed', 'cancelled'],
     default: 'scheduled'
+  },
+  geolocationData: {
+    type: geolocationSchema,
+    default: {}
   },
   classSchedule: {
     type: Schema.Types.ObjectId,
@@ -59,4 +73,4 @@ classSchema.index({ createdBy: 1 });
 
 const Class = mongoose.model('Class', classSchema);
 
-module.exports = Class; 
+module.exports = Class;
