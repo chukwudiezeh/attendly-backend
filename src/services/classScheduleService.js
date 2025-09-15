@@ -8,7 +8,9 @@ class ClassScheduleService {
 
     const classPayload = {
       curriculumCourse: savedClassSchedule.curriculumCourse,
-      classSchedule: savedClassSchedule.id
+      classSchedule: savedClassSchedule.id,
+      day: savedClassSchedule.day,
+      startTime: savedClassSchedule.startTime,
     };
     await ClassService.createClass(classPayload);
     return savedClassSchedule;

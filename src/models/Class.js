@@ -21,6 +21,10 @@ const classSchema = new Schema({
     ref: 'ClassSchedule',
     required: true
   },
+  actualDate: {
+    type: Date,
+    required: true
+  },
   scheduleOverride: {
     type: Schema.Types.ObjectId,
     ref: 'ClassScheduleOverride',

@@ -1,4 +1,5 @@
 const Class = require('../models/Class');
+const { getNextDayDate } = require('../utils/helper');
 
 class ClassService {
   // Create a new class
@@ -6,8 +7,10 @@ class ClassService {
     //get the count of existing classes for the course to generate a unique name
     const classCount = await Class.countDocuments({ curriculumCourse: classData.curriculumCourse });
     const newClass = new Class({
-      ...classData,
-      name: `Class ${classCount + 1}`
+      curriculumCourse: classData.curriculumCourse,
+      classSchedule: classData.classSchedule,
+      name: `Class ${classCount + 1}`,
+      actualDate: getNextDayDate(classData.day, classData.startTime)
     });
     return await newClass.save();
   }
