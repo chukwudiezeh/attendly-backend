@@ -124,7 +124,7 @@ class ClassAttendanceService {
       .sort({ createdAt: -1 }) ;
   }
 
-  async getUserCourseAttendanceStats(userId, userCourseId) {
+  async classAttendanceSummary(userId, userCourseId) {
     // Get all classes for this userCourse
     const userCourse = await UserCourse.findById(userCourseId);
     if (!userCourse) throw new Error('UserCourse not found');
