@@ -5,7 +5,7 @@ const classAttendanceController = require('../controllers/classAttendanceControl
 const { validateCreateClassAttendance, validateUpdateClassAttendance } = require('../middlewares/validators/classAttendanceValidator');
 
 // Create a new class attendance
-router.post('/', validateToken, validateCreateClassAttendance, classAttendanceController.createClassAttendance);
+// router.post('/', validateToken, validateCreateClassAttendance, classAttendanceController.createClassAttendance);
 
 // Get all class attendances
 // router.get('/', classAttendanceController.getAllClassAttendances);
