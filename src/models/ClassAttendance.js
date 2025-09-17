@@ -1,6 +1,15 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const geolocationSchema = new Schema({
+  speed: { type: Number, default: 0 },
+  heading: { type: Number, default: 0 },
+  altitude: { type: Number, default: 0 },
+  accuracy: { type: Number, default: 0 },
+  longitude: { type: Number }, // not required
+  latitude: { type: Number }   // not required
+}, { _id: false });
+
 const classAttendanceSchema = new Schema({
   user: {
     type: Schema.Types.ObjectId,
@@ -13,10 +22,20 @@ const classAttendanceSchema = new Schema({
     required: true
   },
   checkInTime: {
-    type: Date
+    type: Date,
+    default: null
+  },
+  checkInCoordinates: {
+    type: geolocationSchema,
+    default: {}
   },
   checkOutTime: {
-    type: Date
+    type: Date,
+    default: null
+  },
+  checkOutCoordinates: {
+    type: geolocationSchema,
+    default: {}
   },
   status: {
     type: String,

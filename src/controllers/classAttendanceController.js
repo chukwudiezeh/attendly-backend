@@ -3,14 +3,37 @@ const { successResponse, errorResponse } = require('../utils/responseFormatter')
 const { statusCodes } = require('../configs/constants');
 
 class ClassAttendanceController {
-  async createClassAttendance(req, res) {
+  async attendanceClockIn(req, res) {
     try {
-      const attendance = await classAttendanceService.createClassAttendance(req.body);
-      return successResponse(res, attendance, statusCodes.created, 'Class attendance created successfully');
+      const user = req.user;
+
+      const clockInResponse = await classAttendanceService.attendanceClockIn(req.body, user);
+      return successResponse(res, clockInResponse, statusCodes.created, 'Class attendance created successfully');
     } catch (error) {
       if (error.code === 11000) {
         return errorResponse(res, 'Attendance record already exists for this user and class', statusCodes.conflict);
       }
+      return errorResponse(res, error);
+    }
+  }
+
+  async attendanceClockOut(req, res) {
+    try {
+      const user = req.user;
+
+      const clockOutResponse = await classAttendanceService.attendanceClockOut(req.body, user);
+      return successResponse(res, clockOutResponse, statusCodes.ok, 'Class attendance updated successfully');
+    } catch (error) {
+      return errorResponse(res, error);
+    }
+  }
+
+  async classAttendanceSummary (req, res) {
+    try {
+      const user = req.user;
+      const summary = await classAttendanceService.classAttendanceSummary(user._id, req.query);
+      return successResponse(res, summary, statusCodes.ok, 'Class attendance summary retrieved successfully');
+    } catch (error) {
       return errorResponse(res, error);
     }
   }
@@ -36,34 +59,11 @@ class ClassAttendanceController {
     }
   }
 
-  async updateClassAttendance(req, res) {
-    try {
-      const attendance = await classAttendanceService.updateClassAttendance(req.params.id, req.body);
-      if (!attendance) {
-        return errorResponse(res, 'Class attendance not found', statusCodes.notFound);
-      }
-      return successResponse(res, attendance, statusCodes.ok, 'Class attendance updated successfully');
-    } catch (error) {
-      return errorResponse(res, error);
-    }
-  }
-
-  async deleteClassAttendance(req, res) {
-    try {
-      const attendance = await classAttendanceService.deleteClassAttendance(req.params.id);
-      if (!attendance) {
-        return errorResponse(res, 'Class attendance not found', statusCodes.notFound);
-      }
-      return successResponse(res, null, statusCodes.ok, 'Class attendance deleted successfully');
-    } catch (error) {
-      return errorResponse(res, error);
-    }
-  }
-
+  //for lecturer
   async getAttendancesByClass(req, res) {
     try {
       const attendances = await classAttendanceService.getAttendancesByClass(req.params.classId);
-      return successResponse(res, attendances);
+      return successResponse(res, attendances, statusCodes.ok, 'Attendances retrieved successfully');
     } catch (error) {
       return errorResponse(res, error);
     }
@@ -78,6 +78,7 @@ class ClassAttendanceController {
     }
   }
 
+  //for student
   async getAttendanceByUserAndClass(req, res) {
     try {
       const attendance = await classAttendanceService.getAttendanceByUserAndClass(
@@ -85,24 +86,9 @@ class ClassAttendanceController {
         req.params.classId
       );
       if (!attendance) {
-        return errorResponse(res, 'Class attendance not found', statusCodes.notFound);
+        return errorResponse(res, 'Class attendance not found', statusCodes.notFound, 'No attendance record found for this user and class');
       }
-      return successResponse(res, attendance);
-    } catch (error) {
-      return errorResponse(res, error);
-    }
-  }
-
-  async updateAttendanceStatus(req, res) {
-    try {
-      const attendance = await classAttendanceService.updateAttendanceStatus(
-        req.params.id,
-        req.body.status
-      );
-      if (!attendance) {
-        return errorResponse(res, 'Class attendance not found', statusCodes.notFound);
-      }
-      return successResponse(res, attendance, statusCodes.ok, 'Attendance status updated successfully');
+      return successResponse(res, attendance, statusCodes.ok, 'Attendance retrieved successfully');
     } catch (error) {
       return errorResponse(res, error);
     }
