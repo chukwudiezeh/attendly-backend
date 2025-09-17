@@ -31,7 +31,7 @@ class ClassAttendanceController {
   async classAttendanceSummary (req, res) {
     try {
       const user = req.user;
-      const summary = await classAttendanceService.classAttendanceSummary(user._id, req.query);
+      const summary = await classAttendanceService.classAttendanceSummary(user._id, req.params.userCourseId);
       return successResponse(res, summary, statusCodes.ok, 'Class attendance summary retrieved successfully');
     } catch (error) {
       return errorResponse(res, error);

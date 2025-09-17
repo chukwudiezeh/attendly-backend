@@ -125,6 +125,7 @@ class ClassAttendanceService {
   }
 
   async classAttendanceSummary(userId, userCourseId) {
+    console.log('Generating attendance summary for user:', userId, 'and userCourse:', userCourseId);
     // Get all classes for this userCourse
     const userCourse = await UserCourse.findById(userCourseId);
     if (!userCourse) throw new Error('UserCourse not found');
