@@ -4,7 +4,7 @@ const Class = require('../models/Class');
 const ClassSetting = require('../models/ClassSetting');
 const AppError = require('../utils/AppError');
 const { statusCodes } = require('../configs/constants');
-const { getDistanceMeters } = require('../utils/geolocation');
+const { getDistanceMeters } = require('../utils/helper');
 
 class ClassAttendanceService {
   async attendanceClockIn(attendanceData, user) {
