@@ -5,6 +5,7 @@ const ClassSetting = require('../models/ClassSetting');
 const AppError = require('../utils/AppError');
 const { statusCodes } = require('../configs/constants');
 const { getDistanceMeters } = require('../utils/helper');
+const { populate } = require('../models/User');
 
 class ClassAttendanceService {
   async attendanceClockIn(attendanceData, user) {
@@ -107,8 +108,15 @@ class ClassAttendanceService {
   }
 
   async getAttendancesByClass(classId) {
+    // For single populate with sub-path
     return await ClassAttendance.find({ class: classId })
-      .populate(['user', 'class'])
+      .populate([
+        { path: 'user', select: 'name email matricNumber' },
+        { 
+          path: 'class',
+          populate: { path: 'curriculumCourse', populate: { path: 'course' } }
+        }
+      ])
       .sort({ createdAt: -1 });
   }
 

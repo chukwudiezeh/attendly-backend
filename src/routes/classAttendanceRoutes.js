@@ -24,10 +24,10 @@ router.get('/:id', validateToken, classAttendanceController.getClassAttendanceBy
 
 
 // Clock-in attendance
-router.post('/clockin', validateCreateClassAttendance, classAttendanceController.attendanceClockIn);
+router.post('/clockin', validateToken, classAttendanceController.attendanceClockIn);
 
 // Clock-out attendance
-router.post('/clockout', validateUpdateClassAttendance, classAttendanceController.attendanceClockOut);
+router.post('/clockout', validateToken  , classAttendanceController.attendanceClockOut);
 
 // Attendance summary for a user and userCourse
 router.get('/summary/user/:userId/usercourse/:userCourseId', validateToken, classAttendanceController.classAttendanceSummary);
