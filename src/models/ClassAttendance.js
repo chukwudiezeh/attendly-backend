@@ -23,6 +23,7 @@ const classAttendanceSchema = new Schema({
   },
   checkInTime: {
     type: Date,
+    required: true,
     default: null
   },
   checkInCoordinates: {

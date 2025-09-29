@@ -11,6 +11,7 @@ class ClassAttendanceService {
     //ensure user is regiestered to this class course
     const classDoc = await Class.findById(attendanceData.class).populate('curriculumCourse');
     if (!classDoc) throw new AppError('Class not found', statusCodes.badRequest);
+    if (classDoc.status !== 'in_progress') throw new AppError('Cannot Clock-in! Class is not in progress.', statusCodes.badRequest);
 
     const userCourse = await UserCourse.findOne({
       user: user._id,
@@ -41,6 +42,7 @@ class ClassAttendanceService {
     // 5. Save attendance
     const attendance = new ClassAttendance({
       ...attendanceData,
+      checkInTime,
       user: user._id
     });
     return await attendance.save();
@@ -51,7 +53,7 @@ class ClassAttendanceService {
       user: user._id,
       class: attendanceData.class
     });
-    if (!attendance) throw new AppError('Attendance record not found for this user and class', statusCodes.notFound);
+    if (!attendance) throw new AppError('This user did not clock in for this class', statusCodes.notFound);
 
     // Get class and setting
     const classDoc = await Class.findById(attendanceData.class);
@@ -63,11 +65,11 @@ class ClassAttendanceService {
 
     // Ensure class status is completed
     if (classDoc.status !== 'completed') {
-      throw new AppError('Class status must be completed to clock out', statusCodes.badRequest);
+      throw new AppError('Cannot clock out! Class status must be completed', statusCodes.badRequest);
     }
 
     // Check if check-out time is within allowed window (from actualEndTime)
-    const classEnd = new Date(classDoc.actualEndTime);
+    const classEnd = new Date(classDoc.actualEndTime || Date.now());
     const checkOutTime = new Date(attendanceData.checkOutTime || Date.now());
     const diffMinutes = Math.abs((checkOutTime - classEnd) / 60000);
     if (diffMinutes > windowMinutes) {
@@ -81,13 +83,15 @@ class ClassAttendanceService {
       classLocation.latitude, classLocation.longitude,
       checkOut.latitude, checkOut.longitude
     );
-    if (distance <= allowedRadius) {
-      throw new AppError('Check-out location must be outside allowed radius', statusCodes.badRequest);
+
+    if (distance > allowedRadius) {
+      throw new AppError('Check-out location must be within allowed radius', statusCodes.badRequest);
     }
 
     // Update check-out details
     attendance.checkOutTime = checkOutTime;
     attendance.checkOutCoordinates = checkOut;
+    attendance.status = 'present';
 
     return await attendance.save();
   }

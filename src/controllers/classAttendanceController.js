@@ -10,10 +10,7 @@ class ClassAttendanceController {
       const clockInResponse = await classAttendanceService.attendanceClockIn(req.body, user);
       return successResponse(res, clockInResponse, statusCodes.created, 'Class attendance created successfully');
     } catch (error) {
-      if (error.code === 11000) {
-        return errorResponse(res, 'Attendance record already exists for this user and class', statusCodes.conflict);
-      }
-      return errorResponse(res, error);
+      return errorResponse(res, error, statusCodes.badRequest, error.message);
     }
   }
 
@@ -24,7 +21,7 @@ class ClassAttendanceController {
       const clockOutResponse = await classAttendanceService.attendanceClockOut(req.body, user);
       return successResponse(res, clockOutResponse, statusCodes.ok, 'Class attendance updated successfully');
     } catch (error) {
-      return errorResponse(res, error);
+      return errorResponse(res, error, statusCodes.badRequest, error.message);
     }
   }
 
