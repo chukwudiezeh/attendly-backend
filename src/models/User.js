@@ -18,8 +18,6 @@ const userSchema = new Schema({
   },
   matricNumber: {
     type: String,
-    unique: true,
-    sparse: true, // allows null values while maintaining uniqueness
     default: null
   },
   password: {
@@ -111,9 +109,9 @@ userSchema.statics.findByEmail = function(email) {
 };
 
 // Virtual for full user information
-userSchema.virtual('fullInfo').get(function() {
-  return `${this.name} (${this.role}${this.matricNumber ? ` - ${this.matricNumber}` : ''})`;
-});
+// userSchema.virtual('fullInfo').get(function() {
+//   return `${this.name} (${this.role}${this.matricNumber ? ` - ${this.matricNumber}` : ''})`;
+// });
 
 const User = mongoose.model('User', userSchema);
 

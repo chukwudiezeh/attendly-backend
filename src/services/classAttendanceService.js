@@ -5,7 +5,6 @@ const ClassSetting = require('../models/ClassSetting');
 const AppError = require('../utils/AppError');
 const { statusCodes } = require('../configs/constants');
 const { getDistanceMeters } = require('../utils/helper');
-const { populate } = require('../models/User');
 
 class ClassAttendanceService {
   async attendanceClockIn(attendanceData, user) {
